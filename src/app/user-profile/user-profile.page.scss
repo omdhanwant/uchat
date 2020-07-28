@@ -1,0 +1,24 @@
+.user_img {
+    width: 100px;
+    height: 100px;
+    margin: auto; 
+    position: relative;
+    border: 1px solid var(--ion-color-light);
+}
+
+.save_button{
+    text-align: center;
+    margin-top: 10px;
+}
+
+.avatar_container {
+    text-align: center;
+}
+
+.camera_icon{
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    font-size: xx-large;;
+}

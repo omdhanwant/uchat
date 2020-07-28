@@ -1,0 +1,51 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-back-button slot="start"></ion-back-button>
+    <ion-title>{{firstName + ' ' + lastName}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <div class="avatar_container">
+      <input style="display: none;" #chooseFile type="file" class="form-control"
+                (change)="onFileSelected($event)" />
+      <ion-avatar class="user_img">
+        <img [src]="imageUrl ? service.getSanitizedImage(imageUrl) : 'assets/logo.png'">
+        <ion-icon (click)="chooseFile.click()" class="camera_icon" name="camera-outline"></ion-icon>
+      </ion-avatar>
+    </div>
+    <ion-card-content>
+
+      <!-- //form -->
+      
+        <ion-item>
+          <ion-label position="floating">First Name</ion-label>
+          <ion-input name="firstName" [(ngModel)]="firstName" type="text"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Last Name</ion-label>
+          <ion-input name="lastName" [(ngModel)]="lastName" type="text"></ion-input>
+        </ion-item>
+        <div class="save_button">
+          <ion-button (click)="save()" class="text-center" size="samll"  margin-top>
+            Save
+          </ion-button>
+        </div>
+
+        <ion-list>
+          <ion-item>
+            <ion-avatar slot="start">
+              <ion-icon size="large" name="mail-outline"></ion-icon>
+            </ion-avatar>
+            <ion-label>
+              <h4>Email</h4>
+              <p>{{emailId}}</p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>

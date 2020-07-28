@@ -1,0 +1,66 @@
+<ion-header>
+  <ion-toolbar>
+    
+    <ion-buttons slot="start">
+      <ion-button (click)="dismissModal()">
+        <ion-icon name="chevron-back-outline"></ion-icon>
+        <ng-template *ngIf="!isEditMode">Add More Users</ng-template>
+      </ion-button>
+    </ion-buttons>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen>
+  <ion-card>
+    <div class="avatar_container">
+      <input style="display: none;" #chooseFile type="file" class="form-control"
+                (change)="onFileSelected($event)" />
+      <ion-avatar class="chatroom_img">
+        <img (click)="chooseFile.click()" [src]="imageUrl ? service.getSanitizedImage(imageUrl) : 'assets/logo.png'">
+      </ion-avatar>
+    </div>
+
+    <ion-card-header>
+      <ion-card-subtitle>Fill the chat room details</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+
+      <!-- //form -->
+      
+        <ion-item>
+          <ion-label position="floating">Chat Room Name</ion-label>
+          <ion-input name="name" [(ngModel)]="name" type="text"></ion-input>
+        </ion-item>
+        <div class="create_button">
+          <ion-button (click)="save()" class="text-center" size="samll"  margin-top>
+            {{saveButtonName}}
+          </ion-button>
+        </div>
+      
+      <ion-item></ion-item>
+      <ion-item *ngIf="!isEditMode; else nonedit">
+        Selected Users
+      </ion-item>
+      <ng-template #nonedit>
+        <ion-item>
+          Room Users
+        </ion-item>
+      </ng-template>
+
+      <ion-list>
+        <ion-item *ngFor="let user of users">
+          <ion-avatar>
+            <ion-icon *ngIf="!user.image" size="large" name="person-outline"></ion-icon>
+            <ion-img *ngIf="user.image" [src]="service.getSanitizedImage(user.image)"></ion-img>
+          </ion-avatar>
+          <ion-label>
+            <ion-label>{{user.firstName}} {{user.lastName}}</ion-label>
+            <p>{{user.type}}</p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>

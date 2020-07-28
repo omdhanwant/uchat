@@ -1,0 +1,15 @@
+.intro{
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.intro_card {
+    --background: var(--ion-color-light);
+    --color:var(--ion-color-dark);
+}
+
+.add_icon{
+  color: #ffffff;
+}

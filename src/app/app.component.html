@@ -1,3 +1,20 @@
 <ion-app>
-  <ion-router-outlet></ion-router-outlet>
+  <ion-content>
+    <ion-router-outlet></ion-router-outlet>
+
+    <!-- <ion-item>
+      <ion-select [(ngModel)]="color" (ngModelChange)="theme.changeTheme(color)" interface="popover" class="custom-options">
+        <ion-select-option value="autumn">Autumn</ion-select-option>
+        <ion-select-option value="neon">Neon</ion-select-option>
+        <ion-select-option value="dark">Dark</ion-select-option>
+        <ion-select-option value="default">Default</ion-select-option>
+      </ion-select>
+    </ion-item> -->
+  </ion-content>
+    <ngx-loading [show]="alert.loading" 
+    [config]="{
+      primaryColour: theme.THEMES[color].primary,
+      secondaryColour: theme.THEMES[color].secondary,
+      tertiaryColour: theme.THEMES[color].tertiary
+    }"></ngx-loading>
 </ion-app>

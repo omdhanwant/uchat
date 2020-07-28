@@ -1,0 +1,53 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Register</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+       <!-- add image -->
+       <img src="assets/logo.png" class="logo">
+    </ion-card-header>
+  
+    <ion-card-content>
+      <form #form="ngForm" (ngSubmit)="register(form)" >
+        <ion-item>
+          <ion-label position="floating">First Name</ion-label>
+          <ion-input name="firstName" ngModel type="text" required></ion-input>
+        </ion-item>
+
+        <ion-item>
+        <ion-label position="floating">Last Name</ion-label> 
+          <ion-input name="lastName" ngModel type="text" required></ion-input>
+        </ion-item>
+
+        <ion-item>
+        <ion-label position="floating">Email</ion-label> 
+          <ion-input name="emailId" ngModel type="text" required></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="floating">Password</ion-label> 
+            <ion-input name="password" ngModel type="password" required></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="floating">User Type</ion-label>
+          <ion-select name="type" ngModel class="custom-options">
+            <ion-select-option selected value="consumer">CONSUMER</ion-select-option>
+            <ion-select-option value="support">SUPPORT</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <div class="register_button">
+          <ion-button class="text-center" color='primary' size="samll" type="submit"  margin-top>
+            Register
+          </ion-button>
+        </div>
+
+      </form>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

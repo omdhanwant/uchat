@@ -1,0 +1,41 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>login</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+       <!-- add image -->
+       <img src="assets/logo.png" class="logo">
+    </ion-card-header>
+  
+    <ion-card-content>
+      <form #form="ngForm" (ngSubmit)="login(form)" >
+
+        <ion-item>
+        <ion-label position="floating">Email</ion-label> 
+          <ion-input name="emailId" ngModel type="text" required></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="floating">Password</ion-label> 
+            <ion-input name="password" ngModel type="password" required></ion-input>
+        </ion-item>
+
+        <div class="login_button">
+          <ion-button class="text-center" color='primary' size="samll" type="submit"  margin-top>
+            Login
+          </ion-button>
+        </div>
+
+      </form>
+
+      <ion-item>
+        <p>New to UChat ? Register <a routerLink="/register" routerDirection="forward"> here </a></p>
+      </ion-item>
+    </ion-card-content>
+    
+  </ion-card>
+</ion-content>

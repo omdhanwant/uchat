@@ -1,0 +1,65 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons collapse="true" slot="end">
+      <ion-button routerLink="/settings">
+        <ion-icon icon="settings"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <!-- <ion-title *ngIf="userInfo; else default">
+
+    </ion-title> -->
+    <ion-chip routerLink="/user-profile" *ngIf="userInfo; else default">
+      <ion-avatar>
+        <img style="background:#ffffff;" src="assets/logo.png">
+      </ion-avatar>
+      <ion-label  color="light">Hi, {{userInfo.name}}</ion-label>
+    </ion-chip>
+
+    <ng-template #default>
+      <ion-title>Uchat</ion-title>
+    </ng-template>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="!alert.loading">
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content>
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <!-- intro section when no rooms created -->
+      <div class="intro" *ngIf="!chatRooms?.length">
+        <ion-card class="intro_card">
+          <ion-card-header>
+            <img class="intro_gif" src="assets/gifs/tenor.gif" alt="">
+            <ion-card-title style="text-align: center;">
+              Let's create a chat room!
+            </ion-card-title>
+          </ion-card-header>
+        </ion-card>      
+      </div>
+
+
+<!-- show rooms list -->
+<ion-list *ngIf="chatRooms?.length">
+  <ion-item *ngFor="let room of chatRooms" button (click)="goToRoom(room)">
+    <ion-avatar slot="start">
+      <ion-icon *ngIf="!room.image" size="large" name="people-outline"></ion-icon>
+      <ion-img *ngIf="room.image" [src]="service.getSanitizedImage(room.image)"></ion-img>
+    </ion-avatar>
+    <ion-label>
+      <h3>{{room.name}}</h3>
+      <p>{{room['userStrings']}}</p>
+    </ion-label>
+  </ion-item>
+</ion-list>
+
+
+    <!-- fab button to create chat room -->
+    
+   <ion-fab vertical="bottom" horizontal="end" slot="fixed" [class.bounce]="!chatRooms?.length">
+    <ion-fab-button color="primary" routerLink="/initiate-chat">
+      <ion-icon class="add_icon" name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

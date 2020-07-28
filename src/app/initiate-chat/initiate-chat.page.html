@@ -1,0 +1,66 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-back-button slot="start"></ion-back-button>
+    <ion-buttons slot="end" collapse="true">
+      <ion-button fill="outline" (click)="initiateChatRoom()" class="start_button" *ngIf="tags?.length">
+        Next
+      </ion-button>
+    </ion-buttons>
+  
+    <ion-title>
+      Start New Room
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-item *ngIf="!tags?.length">
+  <span class="info_text">Tap on users to add in room</span>
+</ion-item>
+
+<!-- <ion-tags-input [(ngModel)]="tags" [once]="'true'" (onChange)="onTagChange($event)"></ion-tags-input> -->
+<ion-item *ngIf="tags?.length">
+  <tag-input 
+  [(ngModel)]="tags" 
+  [editable]="false" 
+  [tabindex]="true" 
+  [disable]="true"
+  [removable]="true"
+  placeholder="" 
+  secondaryPlaceholder="" 
+  [separatorKeyCodes]="[32]"
+  identifyBy="_id"
+  theme='bootstrap'
+  #input>
+  <ng-template let-item="item" let-index="index"> <!-- DEFINE HERE YOUR TEMPLATE -->
+    <span>
+        <!-- YOU MAY ACTUALLY DISPLAY WHATEVER YOU WANT IF YOU PASS AN OBJECT AS ITEM -->
+        <!-- ex. item.myDisplayValue -->
+
+        {{ item.firstName }} {{ item.lastName }}
+    </span>
+    <delete-icon (click)="input.removeItem(item, index)"></delete-icon>
+</ng-template>
+</tag-input>
+</ion-item>
+
+<ion-item>
+  <!-- Searchbar with a placeholder -->
+  <ion-searchbar [(ngModel)]="search" (ngModelChange)="filter()" autocomplete="on" animated placeholder="Search for your friends on Uchat"></ion-searchbar>
+  </ion-item>
+
+<ion-content fullscreen>
+
+  <ion-list>
+    <ion-item button *ngFor="let user of sortedUsers" (click)="selectedUser(user)">
+      <ion-avatar slot="start">
+        <ion-icon size="large" name="person-outline"></ion-icon>
+      </ion-avatar>
+      <ion-label>
+        <h2>{{user.firstName}} {{user.lastName}}</h2>
+        <h3>{{user.emailId}}</h3>
+        <p>{{user.type}}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+</ion-content>

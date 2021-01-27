@@ -38,10 +38,14 @@ export class UserProfilePage{
     return
   }
 
-  this.updateRoom();
+  this.updateUser();
  }
 
- updateRoom() {
+ logout(){
+   this.auth.logout();
+ }
+
+ updateUser() {
   this.alert.loading = true;
       const user = {
         _id: this.userId,

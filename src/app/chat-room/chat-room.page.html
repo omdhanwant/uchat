@@ -1,0 +1,54 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons collapse="true" slot="start">
+      <ion-button [routerLink]="['..']">
+        <ion-icon name="chevron-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>
+      {{ roomDetail?.name }}
+    </ion-title>
+    <ion-buttons collapse="true" slot="end">
+      <ion-button (click)="presentChatRoomModal()" expand="block" fill="clear" shape="round">
+        <ion-icon name="pencil"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    
+    <div class="user_tags">
+        <span *ngFor="let user of chatMessagesDetails?.users">
+          {{user.firstName}}
+        </span>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" #messagesContainer>
+<!-- messages -->
+        <ion-infinite-scroll position="top" (ionInfinite)="loadMoreMessages($event)">
+          <ion-infinite-scroll-content loadingSpinner="" loadingText="">
+          </ion-infinite-scroll-content>
+        </ion-infinite-scroll>
+
+        <div class="messages_container" >
+          <div class="message" *ngFor="let conversation of messages;">
+            <div [ngClass]="
+            { 'my_message': conversation.postedByUser._id === myId, 
+            'other_message': conversation.postedByUser._id !== myId }">
+            <span>{{ conversation.message.messageText }}</span>
+            <span> {{ conversation.createdAt | date: 'dd MMM hh:mm' }} </span>
+          </div>
+          </div>
+       </div>
+
+</ion-content>
+<div class="actions">
+  <ion-input 
+  type="text" 
+  color="primary" 
+  placeholder="Enter Message"
+  [(ngModel)]="inputText">
+</ion-input>
+<ion-button color="secondary" type="button" (click)="sendMessage()">
+  <ion-icon name="send"  color="primary"></ion-icon>
+</ion-button>
+</div>

@@ -30,8 +30,8 @@ export class LoginPage implements OnInit {
 
           // clear form
           form.reset();
-          const returnUrl =  this.route.snapshot.queryParamMap.get('returnUrl') || '/'
-          this.nav.navigateRoot([returnUrl]);
+          // const returnUrl =  this.route.snapshot.queryParamMap.get('returnUrl') || '/'
+          // this.nav.navigateRoot([returnUrl]);
           // this.nav.navigateBack(['/home']);
         }, error => {
           this.alert.loading = false;

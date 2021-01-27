@@ -25,6 +25,25 @@
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
 
+@import "./theme/variables.scss";
+
+// remove all focus styles
+/* Buttons */
+ion-button:focus,
+ion-button:active,
+ion-button:hover,
+ion-fab-button:focus,
+ion-fab-button:active,
+ion-fab-button:hover,
+.btn:active,
+.btn.active,
+a:focus,
+a:active,
+a:hover,
+a.active {
+    outline: 0px!important;
+    box-shadow: none!important;
+}
 
 // alert css
 .secondary {

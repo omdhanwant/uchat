@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { NetworkService } from './network.service';
-import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface ChatRoom {
         userIds: string[];
@@ -19,7 +19,7 @@ export interface ChatRoom {
 
 export class ChatRoomService extends NetworkService{
 
-    private chatRoomsOfUsers$ = new BehaviorSubject<ChatRoom[]>(null);
+    private chatRoomsOfUser$ = new BehaviorSubject<ChatRoom[]>(null);
 
     // {
     //     "userIds": ["081f1d7bd6b54d03a1402a57d999a6b5"],
@@ -35,17 +35,24 @@ export class ChatRoomService extends NetworkService{
 
     // get all rooms of user
     getChatRoomsOfUser() {
-        if(this.chatRoomsOfUsers$.value){
-            return this.chatRoomsOfUsers$.asObservable();
+        if(this.chatRoomsOfUser$.value){
+            return this.chatRoomsOfUser$.asObservable();
         }
         return this.get(`${environment.baseUrl}/room`)
         .pipe( map((response: ChatRoom[]) => {
-            this.chatRoomsOfUsers$.next(response['rooms']);
+            this.chatRoomsOfUser$.next(response['rooms']);
             return response['rooms'];
         }));
     }
 
+    getChatRoomById(roomId){
+        return this.get(`${environment.baseUrl}/room/${roomId}`)
+        .pipe( map((response: ChatRoom) => {
+            return <ChatRoom>response['room'];
+        })).toPromise();
+    }
+
     refreshChatRooms() {
-        this.chatRoomsOfUsers$.next(null);
+        this.chatRoomsOfUser$.next(null);
     }
 }

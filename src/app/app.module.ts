@@ -27,14 +27,16 @@ import { NgxLoadingModule, ngxLoadingAnimationTypes } from 'ngx-loading';
 import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { far } from '@fortawesome/free-regular-svg-icons';
 import { TagInputModule } from 'ngx-chips';
-
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
   imports: [
     BrowserModule, 
     BrowserAnimationsModule,
-    IonicModule.forRoot(), 
+    IonicModule.forRoot(),
+    SocketIoModule.forRoot(config),
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
@@ -56,6 +58,7 @@ import { TagInputModule } from 'ngx-chips';
     NetworkService,
     ThemeService,
     AlertService,
+    // AuthService,
     UserService,
     ChatRoomService,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },

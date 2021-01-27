@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { NetworkService } from './network.service';
-import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
 import { Observable, BehaviorSubject } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface User {
     _id: string;

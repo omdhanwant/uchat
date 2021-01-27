@@ -1,10 +1,12 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ModalController, NavController } from '@ionic/angular';
-import { User } from 'src/app/services/user.service';
-import { ChatRoomService, ChatRoom } from 'src/app/services/chatRoom.service';
 import { take } from 'rxjs/operators';
-import { AlertService } from 'src/app/services/alert.service';
-import { convertBufferToImageUrl } from 'src/app/utils/commons';
+import { AlertService } from '../../services/alert.service';
+import { ChatRoom, ChatRoomService } from '../../services/chatRoom.service';
+import { User } from '../../services/user.service';
+import { convertBufferToImageUrl } from '../../utils/commons';
+
+
 
 @Component({
   selector: 'app-chat-room-modal',
@@ -20,14 +22,14 @@ export class ChatRoomModalPage {
   blobImage: Blob;
   isEditMode: boolean = false;
   saveButtonName: string = ''
-  constructor(public service: ChatRoomService, private alert: AlertService,private nav: NavController,) { }
+  constructor(public service: ChatRoomService, private alert: AlertService,private nav: NavController) { }
 
   ionViewWillEnter(){
     if(this.room){
       this.isEditMode = true;
       this.name = this.room.name;
       this.imageUrl = this.room.image
-      window.open(this.imageUrl);
+      // window.open(this.imageUrl);
       this.saveButtonName = 'Update'
     } else {
       this.saveButtonName = 'Create'
@@ -91,6 +93,7 @@ export class ChatRoomModalPage {
     this.alert.loading = true;
         this.room.name = this.name;
         this.room.image = this.imageUrl;
+
         this.service.updateChatRoom(this.room)
         .pipe(take(1))
         .subscribe(response => {
@@ -110,7 +113,7 @@ export class ChatRoomModalPage {
  handler(){
   return () => {
     this.dismissModal();
-    this.nav.navigateBack('/home');
+    // this.nav.navigateBack('/home');
   }
 }
 

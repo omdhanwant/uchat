@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
-import { environment } from 'src/environments/environment';
 import { DomSanitizer } from '@angular/platform-browser';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -12,8 +12,8 @@ export class NetworkService {
 
   constructor(private http: HttpClient, public auth: AuthService, private _sanitizer: DomSanitizer) { }
 
-    get(url: string) {
-       return this.http.get(url, { reportProgress : true})
+    get(url: string, options = {}) {
+       return this.http.get(url, { reportProgress : true, ...options })
     }
 
     post(url: string, body: any, options?): Observable<Object> {

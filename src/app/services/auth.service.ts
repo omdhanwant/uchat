@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { take, map } from 'rxjs/operators'
-import { NetworkService } from './network.service';
-import { environment } from 'src/environments/environment';
-import * as utils from 'src/app/utils/constants';
+import { environment } from '../../environments/environment';
+import * as utils from '../utils/constants';
 import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject } from 'rxjs';
 
 interface StoredUser {
   userId:string; 
@@ -21,7 +21,14 @@ interface LoginResponse{
   providedIn: 'root'
 })
 export class AuthService {
+  private peekAuthentication = new BehaviorSubject<boolean>(false);
   constructor(private http: HttpClient){
+    if(localStorage.getItem(utils.USER) )
+      this.peekAuthentication.next(true);
+  }
+
+  peekAuth(){
+   return this.peekAuthentication.asObservable();
   }
 
   getLoggedInUser() {
@@ -42,6 +49,7 @@ export class AuthService {
         // store the token in session storage
         localStorage.setItem( utils.TOKEN, response.authorization);
         localStorage.setItem(utils.USER, JSON.stringify(response.user))
+        this.peekAuthentication.next(true);
         return {}
       }))
      
@@ -54,5 +62,6 @@ export class AuthService {
   public logout() {
     localStorage.removeItem(utils.TOKEN);
     localStorage.removeItem(utils.USER);
+    this.peekAuthentication.next(false);
 }
 }

@@ -28,7 +28,7 @@ export class UchatHomePage {
     this.usersMap = new Map();
   }
  
-  ionViewDidEnter(withRefresh  = undefined){
+  ionViewDidEnter(withRefresh  = null){
     this.userInfo = this.auth.getLoggedInUser();
     this.initData();
     this.alert.loading = true;
@@ -40,9 +40,9 @@ export class UchatHomePage {
         users.forEach(user => {
           this.usersMap.set(user._id, user);
         })
-        return this.service.getChatRoomsOfUser().pipe(take(1))
+        return this.service.getChatRoomsOfUser();
       })
-    ).subscribe(rooms => {
+    ).pipe(take(1)).subscribe(rooms => {
       console.log(rooms);
       this.alert.loading = false;
         this.chatRooms = JSON.parse(JSON.stringify(rooms));
@@ -62,22 +62,23 @@ export class UchatHomePage {
       })
   }
 
-  async presentModal(room: ChatRoom) {
-    const modal = await this.modalController.create({
-      component: ChatRoomModalPage,
-      cssClass: '',
-      componentProps: {
-        "users" : room['users'],
-        "room": room,
-        "controller": this.modalController
-      }
-    });
-    return await modal.present();
-  }
+  // async presentModal(room: ChatRoom) {
+  //   const modal = await this.modalController.create({
+  //     component: ChatRoomModalPage,
+  //     cssClass: '',
+  //     componentProps: {
+  //       "users" : room['users'],
+  //       "room": room,
+  //       "controller": this.modalController
+  //     }
+  //   });
+  //   return modal.present();
+  // }
   
    
-  goToRoom(room) {
-    this.presentModal(room)
+  async goToRoom(room: ChatRoom) {
+    // await this.presentModal(room)
+    this.nav.navigateForward(['/chat-room', room._id]);
   }
 
   doRefresh(event) {

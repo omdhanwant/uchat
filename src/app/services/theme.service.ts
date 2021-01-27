@@ -54,7 +54,7 @@ export class ThemeService {
         light: '#f4f5f8'
       };
 
-  currentTheme: string = 'default'      
+  private currentTheme: string = 'default';
   constructor(
     // private document: Document,
     // private storage: Storage
@@ -65,7 +65,7 @@ export class ThemeService {
   }
 
   // Override all global variables with a new theme
-  setTheme(theme) {
+  setTheme(theme: string) {
     const cssText = this.CSSTextGenerator(theme);
     this.setGlobalCSS(cssText);
     // this.storage.set('theme', cssText);
@@ -86,7 +86,7 @@ export class ThemeService {
 
 changeTheme(name: string) {
     this.currentTheme = name;
-    this.setTheme(this.THEMES[name]);
+    this.setTheme(this.THEMES[this.currentTheme]);
   }
 
   CSSTextGenerator(colors) {

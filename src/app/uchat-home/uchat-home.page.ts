@@ -43,7 +43,7 @@ export class UchatHomePage {
         return this.service.getChatRoomsOfUser();
       })
     ).pipe(take(1)).subscribe(rooms => {
-      console.log(rooms);
+
       this.alert.loading = false;
         this.chatRooms = JSON.parse(JSON.stringify(rooms));
         this.chatRooms.forEach(room => {

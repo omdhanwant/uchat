@@ -22,13 +22,15 @@ export class ChatRoomPage {
   private room: ChatRoom;
   private chatMessagesDetails: ChatMessage;
   private messages: Conversation[];
-  private me: {userId: string;}
+  private me: { userId: string; name: string; }
   private page = 0;
   private limit = 30;
 
   // actions
   inputText: string;
   chatRoomsubscription: Subscription;
+  userActiveSubscription: Subscription;
+  userLeftSubscription: Subscription;
 
   constructor(
     private modalController: ModalController, 
@@ -88,7 +90,15 @@ export class ChatRoomPage {
 
   subscribeToRoom(){
     // connect socket 
-    this.socket.emit('subscribe', this.roomId);
+    this.socket.emit('subscribe', [this.roomId, this.me]);
+
+   this.userActiveSubscription =  this.socket.fromEvent('joined').subscribe((msg: { user: string; }) => {
+      this.alert.presentToast(`${msg.user} joined the room!`)
+    })
+
+    this.userLeftSubscription =  this.socket.fromEvent('left').subscribe((msg: { user: string; }) => {
+      this.alert.presentToast(`${msg.user} left the room!`)
+    })
 
     // start listining to new messages
     this.chatRoomsubscription = this.socket.fromEvent('new message').subscribe(response => {
@@ -162,11 +172,15 @@ export class ChatRoomPage {
 
 
   ionViewWillLeave() {
-    this.socket.disconnect();
-    this.socket.emit('unsubscribe', this.roomId);
-    if( this.chatRoomsubscription ) {
+    this.socket.emit('unsubscribe', [this.roomId,this.me]);
+    if( this.chatRoomsubscription ) 
       this.chatRoomsubscription.unsubscribe();
-    }
+    
+    if (this.userActiveSubscription )
+      this.userActiveSubscription.unsubscribe();
+
+    if (this.userLeftSubscription)
+      this.userLeftSubscription.unsubscribe();
   }
 
 }

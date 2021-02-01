@@ -9,7 +9,7 @@ interface StoredUser {
   userId:string; 
   name: string; 
   email: string; 
-  type: string
+  type: string;
 }
 interface LoginResponse{
   success: boolean;
@@ -23,7 +23,7 @@ interface LoginResponse{
 export class AuthService {
   private peekAuthentication = new BehaviorSubject<boolean>(false);
   constructor(private http: HttpClient){
-    if(localStorage.getItem(utils.USER) )
+    if(sessionStorage.getItem(utils.USER) )
       this.peekAuthentication.next(true);
   }
 
@@ -32,11 +32,11 @@ export class AuthService {
   }
 
   getLoggedInUser() {
-    return localStorage.getItem(utils.USER) ? JSON.parse(localStorage.getItem(utils.USER)) as StoredUser : null;
+    return sessionStorage.getItem(utils.USER) ? JSON.parse(sessionStorage.getItem(utils.USER)) as StoredUser : null;
   }
 
   updateStoredUser(user: StoredUser){
-    localStorage.setItem(utils.USER, JSON.stringify(user))
+    sessionStorage.setItem(utils.USER, JSON.stringify(user))
   }
   register(data){
     return this.http.post(`${environment.baseUrl}/users`, data);
@@ -47,8 +47,8 @@ export class AuthService {
        take(1),
        map((response: LoginResponse) => {
         // store the token in session storage
-        localStorage.setItem( utils.TOKEN, response.authorization);
-        localStorage.setItem(utils.USER, JSON.stringify(response.user))
+        sessionStorage.setItem( utils.TOKEN, response.authorization);
+        sessionStorage.setItem(utils.USER, JSON.stringify(response.user))
         this.peekAuthentication.next(true);
         return {}
       }))
@@ -56,12 +56,12 @@ export class AuthService {
   }
 
   public isLoggedIn(): boolean {
-    return localStorage.getItem(utils.TOKEN) ? true : false;
+    return sessionStorage.getItem(utils.TOKEN) ? true : false;
 }
 
   public logout() {
-    localStorage.removeItem(utils.TOKEN);
-    localStorage.removeItem(utils.USER);
+    sessionStorage.removeItem(utils.TOKEN);
+    sessionStorage.removeItem(utils.USER);
     this.peekAuthentication.next(false);
 }
 }

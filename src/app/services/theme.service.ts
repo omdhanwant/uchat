@@ -9,7 +9,7 @@ import * as Color from 'color';
 export class ThemeService {
      THEMES = {
         default: {
-            primary: '#311b92',
+            primary: '#9966cc',
             secondary: '#b6bbd4',
             tertiary: '#7044ff',
             dark: '#222428',
@@ -55,6 +55,7 @@ export class ThemeService {
       };
 
   private currentTheme: string = 'default';
+  private currentFontSize: string = '14px';
   constructor(
     // private document: Document,
     // private storage: Storage
@@ -65,14 +66,15 @@ export class ThemeService {
   }
 
   // Override all global variables with a new theme
-  setTheme(theme: string) {
+  private setTheme(theme: string) {
     const cssText = this.CSSTextGenerator(theme);
     this.setGlobalCSS(cssText);
     // this.storage.set('theme', cssText);
   }
 
   // Define a single CSS variable
-  setVariable(name, value) {
+  setCSSVariable(name, value) {
+    this.currentFontSize = value;
     document.documentElement.style.setProperty(name, value);
   }
 
@@ -89,7 +91,15 @@ changeTheme(name: string) {
     this.setTheme(this.THEMES[this.currentTheme]);
   }
 
-  CSSTextGenerator(colors) {
+  get selectedTheme(){
+    return this.currentTheme;
+  }
+
+  get selectedFontSize(){
+    return this.currentFontSize;
+  }
+
+  private CSSTextGenerator(colors) {
     colors = { ...this.defaults, ...colors };
   
     const {
@@ -181,7 +191,7 @@ changeTheme(name: string) {
       --ion-color-light-tint: ${Color(light).lighten(tintRatio)};`;
   }
   
-   contrast(color, ratio = 0.8) {
+   private contrast(color, ratio = 0.8) {
     color = Color(color);
     return color.isDark() ? color.lighten(ratio) : color.darken(ratio);
   }

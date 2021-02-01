@@ -1,12 +1,15 @@
 import { Injectable } from '@angular/core';
-import { AlertController } from '@ionic/angular';
+import { AlertController, ToastController } from '@ionic/angular';
 import { ThemeService } from './theme.service';
 
 
 @Injectable()
 export class AlertService {
     loading: boolean;
-    constructor(public alertController: AlertController, private theme: ThemeService){
+    constructor(
+      public alertController: AlertController, 
+      public toastController: ToastController,
+      private theme: ThemeService){
 
     }
 
@@ -25,6 +28,16 @@ export class AlertService {
         await alert.present();
       }
 
+      async presentToast(message: string, color: string = "dark" ) {
+        const toast = await this.toastController.create({
+          message: message,
+          position: 'top',
+          color: color,
+          duration: 3000
+        });
+        toast.present();
+      }
+
       async presentThemeAlert() {
         const alert = await this.alertController.create({
           header: 'Select Theme',
@@ -34,6 +47,7 @@ export class AlertService {
               type: 'radio',
               label: 'Default',
               value: 'default',
+              checked: this.theme.selectedTheme == 'default',
               handler: (input) => this.themeHandler(input)
             },
     
@@ -42,6 +56,7 @@ export class AlertService {
               type: 'radio',
               label: 'Dark',
               value: 'dark',
+              checked: this.theme.selectedTheme == 'dark',
               handler: (input) => this.themeHandler(input)
             },
     
@@ -50,6 +65,7 @@ export class AlertService {
               type: 'radio',
               label: 'Autumn',
               value: 'autumn',
+              checked: this.theme.selectedTheme == 'autumn',
               handler: (input) => this.themeHandler(input)
             },
     
@@ -58,6 +74,7 @@ export class AlertService {
               type: 'radio',
               label: 'Neon',
               value: 'neon',
+              checked: this.theme.selectedTheme == 'neon',
               handler: (input) => this.themeHandler(input)
             }
           ],
@@ -67,7 +84,48 @@ export class AlertService {
         await alert.present();
       }
 
+      async presentFontSizeAlert() {
+        const alert = await this.alertController.create({
+          header: 'Select Font Size',
+          inputs: [
+            {
+              name: 'X-Large',
+              type: 'radio',
+              label: 'X-Large',
+              value: '16px',
+              checked: this.theme.selectedFontSize == '16px',
+              handler: (input) => this.fontSizeHandler(input)
+            },
+    
+            {
+              name: 'Large',
+              type: 'radio',
+              label: 'Large',
+              value: '14px',
+              checked: this.theme.selectedFontSize == '14px',
+              handler: (input) => this.fontSizeHandler(input)
+            },
+    
+            {
+              name: 'Small',
+              type: 'radio',
+              label: 'Small',
+              value: '12px',
+              checked: this.theme.selectedFontSize == '12px',
+              handler: (input) => this.fontSizeHandler(input)
+            }
+          ],
+          buttons: ['OK']
+        });
+    
+        await alert.present();
+      }
+
       themeHandler = (input) => {
-        this.theme.changeTheme(input.value)
+        this.theme.changeTheme(input.value);
+      }
+
+      fontSizeHandler = (input) => {
+        this.theme.setCSSVariable('--fs-msg', input.value);
       }
 }

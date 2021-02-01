@@ -6,7 +6,7 @@ export class AuthInterceptor implements HttpInterceptor {
   constructor() { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
-    this.TOKEN = localStorage.getItem('TOKEN')
+    this.TOKEN = sessionStorage.getItem('TOKEN')
     
     if(this.TOKEN) {
       const authReq = req.clone({

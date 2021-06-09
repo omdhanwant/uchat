@@ -25,6 +25,7 @@ export class ChatRoomPage {
   private me: { userId: string; name: string; }
   private page = 0;
   private limit = 30;
+  private joinedUsers: string[] = [];
 
   // actions
   inputText: string;
@@ -61,12 +62,13 @@ export class ChatRoomPage {
         this.room = util.getPureObject(response[0]);
         this.chatMessagesDetails = util.getPureObject(response[1]);
         this.messages = this.chatMessagesDetails.conversation;
+        this.markAllConversationsAsRead();
         this.page+=1;
         this.alert.loading = false;
         this.subscribeToRoom();
         setTimeout(() => {
           this.scrollToBottom();
-        }, 1000);
+        }, 500);
 
     }).catch(error => {
       this.alert.loading = false;
@@ -92,17 +94,28 @@ export class ChatRoomPage {
     // connect socket 
     this.socket.emit('subscribe', [this.roomId, this.me]);
 
-   this.userActiveSubscription =  this.socket.fromEvent('joined').subscribe((msg: { user: string; }) => {
-      this.alert.presentToast(`${msg.user} joined the room!`)
+   this.userActiveSubscription =  this.socket.fromEvent('joined').subscribe((msg: {user: { name: string; userId: string; }}) => {
+     this.joinedUsers.push(msg.user.userId);
+     console.log(this.joinedUsers);
+      this.alert.presentToast(`${msg.user.name} joined the room!`)
     })
 
-    this.userLeftSubscription =  this.socket.fromEvent('left').subscribe((msg: { user: string; }) => {
-      this.alert.presentToast(`${msg.user} left the room!`)
+    this.userLeftSubscription =  this.socket.fromEvent('left').subscribe((msg: {user: { name: string; userId: string; }}) => {
+      const index =  this.joinedUsers.findIndex(user => user == msg.user.userId);
+      if(index !== -1) {
+        this.joinedUsers.slice(index, 1);
+      }
+      this.alert.presentToast(`${msg.user.name} left the room!`)
+    })
+
+    this.socket.fromEvent('joined users').subscribe(users => {
+      console.log(users);
     })
 
     // start listining to new messages
     this.chatRoomsubscription = this.socket.fromEvent('new message').subscribe(response => {
-      this.messages.push(response['message']);
+      const msg = response['message']
+      this.markAllConversationsAsRead(msg);
       this.scrollToBottom();
     }, error => {
       throw new Error(error.message);
@@ -148,6 +161,23 @@ export class ChatRoomPage {
     }
   }
 
+  async markAllConversationsAsRead(message: Conversation = null){
+    try{
+      await this.messageService.markMessageRead(this.roomId);
+      if(message) {
+        this.joinedUsers.forEach(userId => {
+          message.readByRecipients.push({
+            readAt: null,
+            readByUserId: userId
+          })
+        })
+        this.messages.push(message);
+      }
+    } catch(error) {
+      throw new Error(error.message);
+    }
+  }
+
   get myId(){
     return this.me.userId;
   }
@@ -158,6 +188,11 @@ export class ChatRoomPage {
   
   get roomDetail() {
     return this.room;
+  }
+
+  hasUserReadTheMessage(conversation: Conversation): boolean{
+    const read = conversation.readByRecipients.find(user => user.readByUserId == this.me.userId )
+    return read ? true : false ;
   }
    
   async goToRoom() {

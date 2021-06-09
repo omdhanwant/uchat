@@ -22,4 +22,8 @@ export class ChatMessageService extends NetworkService{
     postMessage(message: {messageText: string }, roomId: string ){
         return this.post(`${environment.baseUrl}/room/${roomId}/message`, message).toPromise();
     }
+    // /mark-read
+    markMessageRead(roomId){
+        return this.put(`${environment.baseUrl}/room/${roomId}/mark-read`, {}).toPromise();
+    }
 }

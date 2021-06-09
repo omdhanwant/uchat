@@ -44,6 +44,14 @@
  .message {
     margin: 5px 0;
     width: 100%;
+    font-size: var(--fs-msg);
+    font-weight: 500;
+}
+
+.message .message-info {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
 }
 
  .message .my_message , 
@@ -53,8 +61,6 @@
     align-items: self-start;
     width: 50%;
     padding: 5px;
-    font-size: var(--fs-msg);
-    font-weight: 500;
 }
 
  .message .my_message span:nth-child(2) , 

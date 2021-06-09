@@ -62,7 +62,6 @@ export class AppComponent implements OnInit, OnDestroy {
     });
 
   this.userActiveSubscription =  this.socket.fromEvent('active').subscribe((msg: {user: string; }) => {
-      console.log(msg);
       this.alert.presentToast(`${msg.user} has joined !`, 'tertiary')
     });
   }

@@ -35,7 +35,14 @@
             { 'my_message': conversation.postedByUser._id === myId, 
             'other_message': conversation.postedByUser._id !== myId }">
             <span>{{ conversation.message.messageText }}</span>
-            <span> {{ conversation.createdAt | date: 'dd MMM hh:mm' }} </span>
+            <div class="message-info">
+              <span> {{ conversation.createdAt | date: 'dd MMM, hh:mm a' }} </span>
+              <ion-icon *ngIf="!hasUserReadTheMessage(conversation); else read; " name="checkmark-outline"></ion-icon>
+              <ng-template #read>
+                <ion-icon name="checkmark-done-outline"></ion-icon>
+              </ng-template>
+            </div>
+            
           </div>
           </div>
        </div>
